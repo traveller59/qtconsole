@@ -26,7 +26,8 @@ from .completion_html import CompletionHtml
 from .completion_plain import CompletionPlain
 from .kill_ring import QtKillRing
 
-
+from codeai.ci.testing import ConsoleBgServer
+ 
 def is_letter_or_number(char):
     """ Returns whether the specified unicode character is a letter or a number.
     """
@@ -210,6 +211,9 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
     # 'QObject' interface
     #---------------------------------------------------------------------------
 
+    def _remote_execute_callback(self, code):
+        return self.execute(code)
+
     def __init__(self, parent=None, **kw):
         """ Create a ConsoleWidget.
 
@@ -225,7 +229,8 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
         self._is_complete_msg_id = None
         self._is_complete_timeout = 0.1
         self._is_complete_max_time = None
-
+        self._server = ConsoleBgServer(50091)
+        self._server.register_execute_callback(self._remote_execute_callback)
         # While scrolling the pager on Mac OS X, it tears badly.  The
         # NativeGesture is platform and perhaps build-specific hence
         # we take adequate precautions here.

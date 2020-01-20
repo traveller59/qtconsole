@@ -1,4 +1,6 @@
-# Jupyter QtConsole
+# Jupyter QtConsole Controlled by Remote
+
+Used for visualization in local CI.
 
 [![Build Status](https://travis-ci.org/jupyter/qtconsole.svg?branch=master)](https://travis-ci.org/jupyter/qtconsole)
 [![Coverage Status](https://coveralls.io/repos/github/jupyter/qtconsole/badge.svg?branch=master)](https://coveralls.io/github/jupyter/qtconsole?branch=master)
