@@ -26,7 +26,7 @@ from .completion_html import CompletionHtml
 from .completion_plain import CompletionPlain
 from .kill_ring import QtKillRing
 
-from codeai.ci.testing import ConsoleBgServer
+from codeai.ci.devops import ConsoleBgServer
  
 def is_letter_or_number(char):
     """ Returns whether the specified unicode character is a letter or a number.
@@ -211,8 +211,13 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
     # 'QObject' interface
     #---------------------------------------------------------------------------
 
-    def _remote_execute_callback(self, code):
-        return self.execute(code)
+    def _remote_execute_callback(self, code, data):
+        data_id = self._server.local_call("codeai::devops.vis.add_remote_data_v2", data)
+        code_in_console = ("from codeai.ci.devops import console\n"
+                           "console.plot_from_remote(\"{}\", \"{}\")".format(
+                            self._server.url, data_id))
+
+        return self.execute(code_in_console)
 
     def __init__(self, parent=None, **kw):
         """ Create a ConsoleWidget.
