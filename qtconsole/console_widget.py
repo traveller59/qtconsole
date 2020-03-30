@@ -13,7 +13,7 @@ import time
 from unicodedata import category
 import webbrowser
 
-from qtpy import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtPrintSupport, QtWidgets
 
 from traitlets.config.configurable import LoggingConfigurable
 from qtconsole.rich_text import HtmlExporter
@@ -248,7 +248,7 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
         layout.setContentsMargins(0, 0, 0, 0)
         self._control = self._create_control()
         if self.paging in ('hsplit', 'vsplit'):
-            self._splitter = QtGui.QSplitter()
+            self._splitter = QtWidgets.QSplitter()
             if self.paging == 'hsplit':
                 self._splitter.setOrientation(QtCore.Qt.Horizontal)
             else:
@@ -814,8 +814,8 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
         """ Print the contents of the ConsoleWidget to the specified QPrinter.
         """
         if (not printer):
-            printer = QtGui.QPrinter()
-            if(QtGui.QPrintDialog(printer).exec_() != QtGui.QDialog.Accepted):
+            printer = QtPrintSupport.QPrinter()
+            if(QtPrintSupport.QPrintDialog(printer).exec_() != QtPrintSupport.QPrintDialog.Accepted):
                 return
         self._control.print_(printer)
 
@@ -1079,7 +1079,7 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
     def _context_menu_make(self, pos):
         """ Creates a context menu for the given QPoint (in widget coordinates).
         """
-        menu = QtGui.QMenu(self)
+        menu = QtWidgets.QMenu(self)
 
         self.cut_action = menu.addAction('Cut', self.cut)
         self.cut_action.setEnabled(self.can_cut())
